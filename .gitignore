@@ -1,0 +1,12 @@
+# Python environments
+.venv/
+venv/
+env/
+
+# Generated figures
+figures/
+
+# Temporary Office files
+~$*.xlsx
+~$*.xls
+~$*.csv
