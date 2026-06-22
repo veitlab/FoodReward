@@ -33,7 +33,9 @@ README.md
 
 Core dependencies:  
   - Python ≥ 3.9  
-  - numpy, pandas, matplotlib, scipy, openpyxl, networkx, statsmodels  
+  - numpy, pandas, matplotlib, scipy, openpyxl, networkx, statsmodels
+
+
 For all requirements see requirements.txt or use  
 ```bash
 pip install -r requirements.txt
