@@ -10,3 +10,7 @@ figures/
 ~$*.xlsx
 ~$*.xls
 ~$*.csv
+
+# Python cache
+__pycache__/
+*.pyc
