@@ -1,0 +1,6 @@
+experiment,phase,day,batch_kind,batch_filename,batch_found,n_lines,n_timestamped_files,duration_hours
+Bird4_HF4,baseline,base2_251207,keep_notselect,batch_keep_notselect.txt,True,321,321,8.09388888888889
+Bird4_HF4,baseline,base2_251208,keep_notselect,batch_keep_notselect.txt,True,384,384,10.404166666666667
+Bird4_HF4,training,train_251212,keep_notselect,batch_keep_notselect.txt,True,368,368,7.060555555555555
+Bird4_HF4,training,train_251213,keep_notselect,batch_keep_notselect.txt,True,457,457,8.009722222222223
+Bird4_HF4,training,train_251214,keep_notselect,batch_keep_notselect.txt,True,481,481,7.788888888888889

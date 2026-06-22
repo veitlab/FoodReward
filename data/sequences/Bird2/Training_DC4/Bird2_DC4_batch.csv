@@ -1,0 +1,6 @@
+experiment,phase,day,batch_kind,batch_filename,batch_found,n_lines,n_timestamped_files,duration_hours
+Bird2_DC4,baseline,base_260105,batch,batch.txt,True,741,741,8.063611111111111
+Bird2_DC4,baseline,base_260106,batch,batch.txt,True,474,474,6.785555555555556
+Bird2_DC4,training,train_260110,batch,batch.txt,True,1148,1148,8.035833333333333
+Bird2_DC4,training,train_260111,batch,batch.txt,True,966,966,8.010277777777778
+Bird2_DC4,training,train_260112,batch,batch.txt,True,997,997,7.956388888888889

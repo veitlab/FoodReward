@@ -1,0 +1,8 @@
+experiment,phase,day,batch_kind,batch_filename,batch_found,n_lines,n_timestamped_files,duration_hours
+Bird1_bkd,baseline,base_241001,batch,batch.txt,True,47,47,4.599722222222222
+Bird1_bkd,training,train_241002,batch,batch.txt,True,135,116,6.961944444444445
+Bird1_bkd,training,train_241003,batch,batch.txt,True,76,69,6.543611111111111
+Bird1_bkd,training,train_241004,batch,batch.txt,True,51,46,6.8625
+Bird1_bkd,training,train_241005,batch,batch.txt,True,73,68,6.533333333333333
+Bird1_bkd,training,train_241006,batch,batch.txt,True,51,46,6.985833333333333
+Bird1_bkd,training,train_241007,batch,batch.txt,True,27,24,5.6466666666666665
