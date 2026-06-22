@@ -11,6 +11,10 @@ data/
   ├── sequences/
       ├── Bird1/
           └── Training_bkd/
+              └── ...batch.csv
+              └── ...keep_notselect.csv
+              └── ...sequence.csv
+              └── ...sequence_catch.csv
       ├── Bird2/
           └── Training_J6/
           └── ...
@@ -30,6 +34,7 @@ figures/
   ├── Figure_1/
           └── Fig1_C.svg
           └── ...
+  ├── ...
 requirements.txt
 README.md
 ```  
