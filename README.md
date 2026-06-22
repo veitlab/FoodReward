@@ -38,7 +38,7 @@ figures/
 requirements.txt
 README.md
 ```
-The figure plot functions are called from the */scripts* folder.  
+Scripts should be run from the *scripts* folder.    
 The folder *figures* will be created once a script was run.
 
 ## Requirements 
