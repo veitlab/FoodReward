@@ -16,7 +16,7 @@ data/
           └── ...
       ├── Bird3/
           └── ...
-      ├── Bird4/
+      └── Bird4/
           └── ...
   ├── click_accuracy.xlsx
 scripts/
@@ -26,9 +26,14 @@ scripts/
   ├── ...
   └── util/
       └── helper_fct.py
+figures/
+  ├── Figure_1/
+          └── Fig1_C.svg
+          └── ...
 requirements.txt
 README.md
-```
+```  
+The folder *figures* will be created once a script was run.
 
 ## Requirements 
 
