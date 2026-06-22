@@ -23,6 +23,7 @@ scripts/
   ├── Figure_1.py
   ├── Figure_2.py
   ├── Figure_3.py
+  ├── ...
   └── util/
       └── helper_fct.py
 requirements.txt
