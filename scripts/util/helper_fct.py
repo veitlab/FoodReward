@@ -115,9 +115,6 @@ def load_labels(csv_file):
     return labels_dict
 
 def get_datasets():
-    """
-    Return all sequence CSV paths.
-    """
     return {
         "Bird1_bkd": SEQUENCE_DIR / "Bird1" / "Training_bkd" / "Bird1_bkd_sequence.csv",
         "Bird1_bkd_catch": SEQUENCE_DIR / "Bird1" / "Training_bkd" / "Bird1_bkd_sequence_catch.csv",
@@ -158,8 +155,6 @@ def load_labels_with_feedback(csv_file):
     - all baseline files
     - all postbaseline files
     - only training files with has_feedback == 1
-
-    This does not filter catch vs. non-catch.
     """
     df = pd.read_csv(csv_file)
 
@@ -187,10 +182,8 @@ def load_labels_with_feedback(csv_file):
 
     return labels_dict
 
+# Create bird dictionary from loaded labels
 def make_birds_dict(labels, catch=False):
-    """
-    Create bird dictionary from loaded labels.
-    """
     if catch:
         return {
             bird: labels[f"{bird}_catch"]
@@ -202,22 +195,13 @@ def make_birds_dict(labels, catch=False):
         for bird in BIRDS
     }
 
+# Optionally load catch files only
 def load_birds(catch=False):
     labels = load_all_labels()
     return make_birds_dict(labels, catch=catch)
 
+# Return / create a figure directory inside the repository
 def get_figure_dir(*subfolders, create=True):
-    """
-    Return a figure directory inside publish_code/figures.
-
-    Examples
-    --------
-    get_figure_dir()
-    -> publish_code/figures
-
-    get_figure_dir("figure1")
-    -> publish_code/figures/figure1
-    """
     figure_dir = FIGURE_DIR.joinpath(*subfolders)
 
     if create:
@@ -326,7 +310,6 @@ def compute_branch_probs(labels_dict, target_syl, branch_syl, show_postbase=True
     Computes all target → branch events across all files for each day, 
     then calculates the probability of branching to each branch syllable.
     """
-
     all_folders = sorted(
         list({os.path.basename(os.path.dirname(p)) for p in labels_dict.keys()}),
         key=day_sort_key
@@ -436,7 +419,7 @@ def run_2x2_branch_test(
     Compare the frequency of one target branch between two groups of folders.
 
     For each group, all target→branch events are pooled across the selected
-    folders. The function then builds a 2x2 contingency table for the 
+    folders. The function builds a 2x2 contingency table for the 
     transition target_syl→target_branch, and all other followers of target_syl.
 
     Depending on the expected frequencies, the function uses either
@@ -607,7 +590,7 @@ def normality_from_values(values, alpha=0.05):
                 "n": n,
                 "p": np.nan,
                 "normal": False,
-                "note": "n<3, Shapiro nicht aussagekraeftig",
+                "note": "n<3",
             }
         try:
             _, pval = stats.shapiro(values)
@@ -623,7 +606,7 @@ def normality_from_values(values, alpha=0.05):
                 "n": n,
                 "p": np.nan,
                 "normal": False,
-                "note": f"Shapiro-Fehler: {exc}",
+                "note": f"error: {exc}",
             }
     
 # Derive repeat unit length from target syllable pattern
@@ -642,7 +625,6 @@ def get_repeat_lengths(seq, local_target_syl, local_context=False):
         return []
 
     matches = re.findall(local_target_syl, seq)
-
     if not matches:
         return []
     
@@ -664,7 +646,6 @@ def compute_day_raw_values(labels_dict, target_syl, context=False):
     )
 
     day_to_values = {}
-
     for day_folder in all_folders_local:
         day_files = [
             p for p in labels_dict.keys()
@@ -736,7 +717,6 @@ def nanmean_or_nan(values):
 
 # Uniform axis for small line plots
 def setup_bs_t_summary_axis(ax, label_fs, tick_fs):
-    """Einheitliche x-Achse für alle Baseline-vs-Training-Summary-Plots."""
     x_base = 0.35
     x_train = 0.65
     ax.set_xticks([x_base, x_train])
@@ -746,7 +726,6 @@ def setup_bs_t_summary_axis(ax, label_fs, tick_fs):
     return x_base, x_train
 
 def setup_catch_noncatch_summary_axis(ax, label_fs, tick_fs):
-    """Einheitliche x-Achse für Catch-vs-Non-Catch-Summary-Plots."""
     x_catch = 0.35
     x_noncatch = 0.65
     ax.set_xticks([x_catch, x_noncatch])
@@ -756,7 +735,6 @@ def setup_catch_noncatch_summary_axis(ax, label_fs, tick_fs):
     return x_catch, x_noncatch
 
 def finalize_bs_t_summary_layout(fig, right=0.78):
-    """Feste Ränder, damit BS/T-Summary-Plots dieselbe sichtbare Plotbreite haben."""
     fig.subplots_adjust(left=0.24, right=right, bottom=0.18, top=0.96)
     
 # Calculates pooled self-transition probability for baseline/ training
@@ -883,9 +861,7 @@ def wilcoxon_by_training_from_summary(summary_result, min_support_files=3):
 
 # finds target syl in mutliple repeats and puts it in front
 def get_plot_repeats(target_syl, repeats=None):
-    """
-    target immer vorne. Wenn repeats None -> [target].
-    """
+    
     if repeats is None:
         return [target_syl]
     reps = list(repeats)
@@ -895,25 +871,15 @@ def get_plot_repeats(target_syl, repeats=None):
 
 # creates dictionary of sorted repeat / context
 def resolve_per_repeat_flags(repeats, flag_spec, default=False):
-    """
-    Normalisiert chunk/context Spezifikation zu dict: repeat -> bool
 
-    flag_spec kann sein:
-      - bool
-      - list/np.ndarray aligned zu repeats
-      - dict {repeat: bool}
-      - None
-
-    repeats: list in genau der Reihenfolge, in der du sie plottest.
-    """
     if flag_spec is None:
         return {r: bool(default) for r in repeats}
 
-    # bool für alle repeats
+    # bool for all repeats
     if isinstance(flag_spec, (bool, np.bool_)):
         return {r: bool(flag_spec) for r in repeats}
 
-    # dict pro repeat
+    # dict per repeat
     if isinstance(flag_spec, dict):
         return {r: bool(flag_spec.get(r, default)) for r in repeats}
 
@@ -922,7 +888,6 @@ def resolve_per_repeat_flags(repeats, flag_spec, default=False):
         out = {}
         for r, v in zip(repeats, flag_spec):
             out[r] = bool(v)
-        # falls Liste zu kurz: Rest default
         for r in repeats[len(out):]:
             out[r] = bool(default)
         return out
@@ -930,6 +895,7 @@ def resolve_per_repeat_flags(repeats, flag_spec, default=False):
     # fallback
     return {r: bool(default) for r in repeats}
 
+# reads recording time and recorded bouts from .csv files _batch / _keep_notselect
 def read_song_rate_day_data_from_experiment_csvs(
     root_dir_per_bird,
     experiment,
@@ -1034,30 +1000,17 @@ def compute_song_lengths_per_day(labels_dict):
     }
 
 def count_repeat_units_in_match(match_text, target_syl):
-    """
-    Count how often the repeated unit occurs inside one regex match.
-
-    Examples
-    --------
-    target_syl="j+", match_text="jjj"         -> 3
-    target_syl="bf+", match_text="bfff"       -> 3
-    target_syl="kb+", match_text="kbbb"       -> 3
-    target_syl="(?:dc)+", match_text="dcdc"   -> 2
-    target_syl="[jm]+", match_text="jmj"      -> 3
-    """
 
     if not isinstance(target_syl, str) or not target_syl.endswith("+"):
         return 1
-
+    
     # Meta-repeat, e.g. (?:dc)+
     if target_syl.startswith("(?:") and target_syl.endswith(")+"):
         unit_len = get_unit_len(target_syl)
         return len(match_text) // unit_len
-
     # Character class, e.g. [jm]+
     if target_syl.startswith("[") and target_syl.endswith("]+"):
         return len(match_text)
-
     # Plain repeat, e.g. j+, bf+, kb+
     # j+  -> no prefix, repeated unit is j
     # bf+ -> prefix is b, repeated unit is f
@@ -1080,26 +1033,6 @@ def extract_seq_counts(
     A valid target is:
     - the first match of target_syl, if target_repeat is None
     - the first match with repeat count >= target_repeat, if target_repeat is given
-
-    Parameters
-    ----------
-    labels_dict : dict
-        file_path -> label string
-
-    target_syl : str
-        Regex pattern for the target, e.g. "j+", "bf+", "(?:dc)+".
-
-    position : str
-        "before" -> count syllables before the target starts
-        "after"  -> count syllables after the target ends
-
-    target_repeat : int or None, default=None
-        If given, only matches with repeat length >= target_repeat are used.
-
-    Returns
-    -------
-    baseline_vals, training_vals : list, list
-        Counts for baseline and training songs.
     """
 
     if position not in ("before", "after"):
@@ -1113,7 +1046,6 @@ def extract_seq_counts(
         except (TypeError, ValueError):
             target_repeat = None
 
-    # Determine which training days to use
     # Determine which training days to use
     all_training_days = sorted(
         {
@@ -1188,16 +1120,9 @@ def extract_seq_counts(
 
     return baseline_vals, training_vals
 
+# Calculate per day: number of bouts, number of repeats per song, mean repeat number per song
 def compute_bouts_and_targets_per_day(labels_dict, target_syl):
-    """
-    Berechnet pro Tag:
-      - n_bouts: Anzahl Songs/WAV-Files mit Labels (ein Song = ein Bout)
-      - repeats_per_song: Anzahl Target-Repeats pro Song (unabhängig von Repeat-Länge)
-      - mean_repeats_per_song: Mittelwert der Repeat-Anzahl pro Song
 
-    Jeder Regex-Match von target_syl zählt als ein Repeat-Event,
-    egal wie lang der Match ist (z.B. jjj und jjjjj zählen jeweils als 1 Event).
-    """
     day_to_data = {}
     all_days = sorted({os.path.basename(os.path.dirname(p)) for p in labels_dict.keys()})
 
@@ -1215,10 +1140,8 @@ def compute_bouts_and_targets_per_day(labels_dict, target_syl):
             if not labels:
                 continue
 
-            # Ein geladener Song/WAV entspricht hier einem Bout.
             n_bouts += 1
 
-            # Jeder Match zählt als ein Repeat-Event, unabhängig von der Länge des Matches.
             n_target_repeats = len(re.findall(target_syl, labels))
             repeats_per_song.append(n_target_repeats)
 
@@ -1244,218 +1167,6 @@ def get_lengths_from_vals(vals):
 
     return lengths
 
-# find songs with feedback (real non-catch files, no misses)
-def summarize_feedback_information(labels_dict, print_per_file=True, feedback_pattern=None):
-    """
-    Sucht fuer jeden Eintrag in labels_dict die passende .rec-Datei,
-    extrahiert Feedback-Eintraege per Regex und trennt in
-    'mit Match' vs. 'ohne Match'.
-
-    Inhaltlich ist das eine reine Parsing-/Inspektionsfunktion für .rec-Dateien:
-    Sie ändert labels_dict nicht, sondern liefert nur Zusatzinformation dazu,
-    in welchen zugehörigen rec-Dateien Feedback-Ereignisse gefunden wurden.
-
-    Returns
-    -------
-    dict mit Schluesseln:
-        with_feedback, without_feedback, missing_rec, missing_pattern
-    """
-    def _rec_path_from_label_path(file_path):
-        # Die Funktion arbeitet nur mit labels_dict-Keys. Daraus wird heuristisch
-        # der erwartete .rec-Dateiname abgeleitet.
-        if file_path.endswith(".wav.not.mat"):
-            return file_path.replace(".wav.not.mat", ".rec")
-        if file_path.endswith(".not.mat"):
-            return file_path.replace(".not.mat", ".rec")
-        if file_path.endswith(".wav"):
-            return file_path.replace(".wav", ".rec")
-        return file_path + ".rec"
-
-    if feedback_pattern is None:
-        # Default-Pattern für Feedback-/Catch-Einträge in den rec-Dateien.
-        # Erwartet werden vier Gruppen:
-        #   1) Zeitstempel
-        #   2) Typ (FB oder catch)
-        #   3) Quell-/Dateiname
-        #   4) Template-ID
-        feedback_pattern = r"([\d\.]+E\+?\d+) msec: (FB|catch) # ([A-Za-z0-9_\.\\/:]+) : Templ = (\d+)"
-    feedback_re = re.compile(feedback_pattern)
-
-    with_feedback = []
-    without_feedback = []
-    missing_rec = []
-    missing_pattern = []
-
-    for file_path in sorted(labels_dict.keys()):
-        rec_path = _rec_path_from_label_path(file_path)
-
-        # Wenn die rec-Datei fehlt, kann für dieses Label-File natürlich keine
-        # Feedback-Information bestimmt werden.
-        if not os.path.exists(rec_path):
-            missing_rec.append((file_path, rec_path))
-            continue
-
-        try:
-            # Mit encoding="utf-8" und errors="ignore" bleibt das Parsing robust,
-            # auch wenn einzelne rec-Dateien ungewöhnliche Zeichen enthalten.
-            with open(rec_path, "r", encoding="utf-8", errors="ignore") as f:
-                rec_text = f.read()
-        except Exception as e:
-            missing_rec.append((file_path, f"{rec_path} (read error: {e})"))
-            continue
-
-        # findall liefert eine Liste aller Treffer des Patterns. Ein File kann
-        # also mehrere Feedback-/Catch-Ereignisse enthalten.
-        matches = feedback_re.findall(rec_text)
-        has_feedback = len(matches) > 0
-
-        if has_feedback:
-            with_feedback.append((file_path, rec_path, matches))
-        else:
-            without_feedback.append((file_path, rec_path, []))
-            missing_pattern.append((file_path, rec_path))
-
-    if print_per_file:
-        # Die Ausgabe ist absichtlich gruppiert, damit man sofort sieht, welche
-        # Dateien Treffer enthalten und welche nicht.
-        print("\n=== Feedback-Matches: GEFUNDEN ===")
-        if with_feedback:
-            for file_path, _, matches in with_feedback:
-                for m in matches:
-                    time_ms, fb_type, src, templ = m
-                    print(f"{file_path}: time={time_ms}, type={fb_type}, src={src}, templ={templ}")
-        else:
-            print("(keine)")
-
-        print("\n=== Feedback-Matches: NICHT GEFUNDEN ===")
-        if without_feedback:
-            for file_path, _, _ in without_feedback:
-                print(f"{file_path}: <kein Match>")
-        else:
-            print("(keine)")
-
-        if missing_pattern:
-            print("\n=== .rec ohne Treffer fuer feedback_pattern ===")
-            for file_path, rec_path in missing_pattern:
-                print(f"{file_path}: {rec_path}")
-
-        if missing_rec:
-            print("\n=== fehlende .rec-Dateien ===")
-            for file_path, rec_path in missing_rec:
-                print(f"{file_path}: {rec_path}")
-
-        print(
-            "\nSummary: "
-            f"with_feedback={len(with_feedback)}, "
-            f"without_feedback={len(without_feedback)}, "
-            f"missing_pattern={len(missing_pattern)}, "
-            f"missing_rec={len(missing_rec)}"
-        )
-
-    return {
-        "with_feedback": with_feedback,
-        "without_feedback": without_feedback,
-        "missing_rec": missing_rec,
-        "missing_pattern": missing_pattern,
-    }
-
-# creates a dictionary containing only files with feedback
-def filter_labels_dict_training_feedback(
-    labels_dict,
-    feedback_summary=None,
-    feedback_pattern=None,
-    keep_other_phases=False,
-    print_summary=True
-    ):
-    """
-    Filtert labels_dict so, dass:
-      - Baseline/Postbase komplett erhalten bleiben
-      - Training nur Files mit Feedback-Treffer behaelt
-
-        Diese Funktion ist der Brückenschritt zwischen Parsing und Plotting:
-        summarize_feedback_information() sagt nur, welche rec-Dateien Feedback
-        enthalten; hier wird diese Information benutzt, um labels_dict selbst auf
-        die gewünschte Teilmenge zu reduzieren.
-
-    Parameters
-    ----------
-    labels_dict : dict
-        file_path -> label string
-    feedback_summary : dict or None
-        Optionales Ergebnis von summarize_feedback_information(...), damit die
-        .rec-Dateien nicht erneut gelesen werden muessen.
-    feedback_pattern : str or None
-        Optionales Regex fuer summarize_feedback_information, wenn
-        feedback_summary nicht uebergeben wird.
-    keep_other_phases : bool
-        Falls True, werden nicht-base/train Ordner unveraendert behalten.
-    print_summary : bool
-        Falls True, wird eine kurze Zusammenfassung gedruckt.
-
-    Returns
-    -------
-    filtered_labels_dict : dict
-    """
-    if feedback_summary is None:
-        # Wenn die Feedback-Zusammenfassung noch nicht existiert, wird sie hier
-        # einmal intern berechnet. So kann die Funktion entweder direkt mit dem
-        # Regex arbeiten oder ein bereits vorhandenes Ergebnis weiterverwenden.
-        feedback_summary = summarize_feedback_information(
-            labels_dict,
-            print_per_file=False,
-            feedback_pattern=feedback_pattern,
-        )
-
-    # Für die eigentliche Filterung reicht die Menge der Filepaths mit Feedback.
-    feedback_files = {file_path for file_path, _, _ in feedback_summary["with_feedback"]}
-
-    filtered = {}
-    n_baseline_kept = 0
-    n_training_kept = 0
-    n_training_dropped = 0
-    n_other_kept = 0
-
-    for file_path, seq in labels_dict.items():
-        # Die Phase wird ausschließlich über den Elternordner des Files bestimmt.
-        # Das ist konsistent mit der restlichen Dateilogik im Skript.
-        day = os.path.basename(os.path.dirname(file_path)).lower()
-        is_baseline = day.startswith("base") or day.startswith("postbase")
-        is_training = day.startswith("train")
-
-        if is_baseline:
-            # Baseline/Postbase bleibt immer vollständig erhalten.
-            filtered[file_path] = seq
-            n_baseline_kept += 1
-            continue
-
-        if is_training:
-            # Bei Training wird selektiv gefiltert: nur Files mit nachgewiesenem
-            # Feedback-Match bleiben im Dictionary.
-            if file_path in feedback_files:
-                filtered[file_path] = seq
-                n_training_kept += 1
-            else:
-                n_training_dropped += 1
-            continue
-
-        # Alle sonstigen Phasen (falls vorhanden) können optional unverändert
-        # mitgenommen werden.
-        if keep_other_phases:
-            filtered[file_path] = seq
-            n_other_kept += 1
-
-    if print_summary:
-        print(
-            "Filtered labels_dict: "
-            f"total_in={len(labels_dict)}, total_out={len(filtered)}, "
-            f"baseline_kept={n_baseline_kept}, "
-            f"training_kept_with_feedback={n_training_kept}, "
-            f"training_dropped_no_feedback={n_training_dropped}, "
-            f"other_kept={n_other_kept}"
-        )
-
-    return filtered
-
 # builds a color map for the raster plot, takes colors you give it
 def build_syllable_color_map(
     syllables,
@@ -1466,7 +1177,6 @@ def build_syllable_color_map(
     fixed_colors = {} if fixed_colors is None else dict(fixed_colors)
     syllables = list(syllables)
 
-    # Reihenfolge erhalten und Duplikate entfernen.
     seen = set()
     ordered_syllables = []
     for s in syllables:
@@ -1495,9 +1205,7 @@ def build_syllable_color_map(
     if not remaining:
         return color_map
 
-    # Dichte Kandidaten auf dem Hue-Wheel.
     candidate_hues = np.linspace(0.0, 1.0, 360, endpoint=False)
-
     for s in remaining:
         if not used_hues:
             best_h = 0.0
@@ -1527,9 +1235,6 @@ def match_position_in_original(seq_orig, align_to_target, align_repeat_unit, ali
         return None
 
     # Align to a specific repeat unit inside the target match.
-    # Example:
-    # align_to_target="b+", align_repeat_unit="b", align_repeat_index=4
-    # -> align to the 4th b.
     if align_repeat_unit is not None and align_repeat_index is not None:
         repeat_index = int(align_repeat_index)
 
@@ -1644,34 +1349,28 @@ def extract_song_lengths(ldict, only_prefix=("train",)):
 
     return np.array(lengths, dtype=float)
 
+# map labels to a given rule
 def map_labels(label_series, combine_bk_chunks=False):
     """
-    Map already-letter-coded CSV labels.
-
+    Map letter-coded CSV labels, specific to Bird1
     Rule:
-    - b after a currently open b-token -> k
-
+    - b after b -> k
     Optional:
     - b + k -> bk
-
-    This mimics the old pre-pass behavior from the .not.mat pipeline.
     """
     symbols = list(label_series) if isinstance(label_series, str) else list(label_series)
 
     mapped = []
-
     for tok in symbols:
         if tok == "b" and mapped and mapped[-1] == "b":
             mapped.append("k")
         else:
             mapped.append(tok)
-
     if not combine_bk_chunks:
         return mapped
 
     result = []
     i = 0
-
     while i < len(mapped):
         if i < len(mapped) - 1 and mapped[i] == "b" and mapped[i + 1] == "k":
             result.append("bk")
@@ -1682,12 +1381,13 @@ def map_labels(label_series, combine_bk_chunks=False):
 
     return result
 
+# create chunks / repeat merges
 def build_chunk_sequence(
     bout_sequence,
     label_merge_map=None,
     repeat_collapse_map=None,
     exclude_labels=None,
-    combine_bk_chunks=True,
+    combine_bk_chunks=False,
 ):
     if label_merge_map is None:
         label_merge_map = {}
@@ -1742,9 +1442,8 @@ def compute_transition_matrix_and_labels_from_bouts(
     exclude_labels=None,
     label_merge_map=None,
     repeat_collapse_map=None,
-    combine_bk_chunks=True,
-):
-    """Berechnet Transitionen nur innerhalb einzelner Bouts (keine Bout-übergreifenden Übergänge)."""
+    combine_bk_chunks=False,
+    ):
     if exclude_labels is None:
         exclude_labels = set()
     if label_merge_map is None:
@@ -1791,9 +1490,7 @@ def plot_transition_diagram(
     figsize=(10, 10),
     node_threshold=0,
     edge_threshold=1,
-):
-    """Plottet ein Transition Diagram basierend auf einer Transition Matrix."""
-
+)   :
     node_counts = np.sum(transition_matrix, axis=0)
     total_count = np.sum(node_counts)
 
@@ -2033,7 +1730,6 @@ def discrete_split_violin(ax, x_center, base, train, width, col_base, col_train,
     for y, tw in zip(ys, train_w):
         ax.hlines(y, x_center, x_center + tw * width, color=col_train, alpha=alpha, lw=line_width, zorder=1)
 
-
 def flatten_lengths(day_items):
     arrays = [vals["lengths"] for _, vals in day_items if len(vals["lengths"]) > 0]
     if len(arrays) == 0:
@@ -2058,7 +1754,6 @@ def pooled_rate(day_list):
         return np.nan, total_songs, total_hours
 
     return total_songs / total_hours, total_songs, total_hours
-
 
 def flatten_repeats(day_items):
     arrays = [vals["repeats_per_song"] for _, vals in day_items if len(vals["repeats_per_song"]) > 0]
@@ -2097,7 +1792,6 @@ def load_click_accuracy_percentages(
     ]
 
     all_pct = {}
-
     for sheet in sheet_names:
         df = pd.read_excel(
             file_path,
@@ -2105,7 +1799,6 @@ def load_click_accuracy_percentages(
             skiprows=skiprows,
             index_col=0,
         )
-
         all_pct[sheet] = compute_percentage_df(df, categories)
 
     return all_pct

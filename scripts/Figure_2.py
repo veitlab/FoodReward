@@ -1379,7 +1379,6 @@ def metarepeat_transitions(
         if os.path.basename(os.path.dirname(path)) in training_day_set
     }
 
-    # Counts und Wahrscheinlichkeiten getrennt fuer Baseline und Training berechnen.
     phase_stats = {}
     for phase_name, labels_subset in [
         ("baseline", baseline_labels),
@@ -1458,7 +1457,6 @@ def metarepeat_transitions(
     baseline_stats = phase_stats["baseline"]
     training_stats = phase_stats["training"]
 
-    # Tests berechnen und optional direkt in die Konsole printen.
     tests_out = {}
     print("\n=== TWO-CHAR TRANSITION TESTS ===")
     print(f"target_syl={target_syl}, repeat_unit={repeat_unit}, context={context}")
@@ -1573,7 +1571,6 @@ def metarepeat_transitions(
             "mean_percent_delta_change": mean_percent_delta_change,
         }
 
-    # Combined plot.
     fig, (ax_top, ax_bottom) = plt.subplots(
         2,
         1,

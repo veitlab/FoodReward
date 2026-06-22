@@ -29,9 +29,7 @@ from util.helper_fct import (
     BIRD_COLORS as bird_colors,
     BIRD_NAME_MAPPING as bird_name_mapping,
     TARGET_SYL_PER_BIRD as target_syl_per_bird,
-    CONTEXT_PER_BIRD as context_per_bird,
     TARGET_REPEAT_PER_BIRD as target_repeat_per_bird,
-    REPEATS_PER_BIRD as repeats_per_bird
 )
 
 from util.helper_fct import (
@@ -81,7 +79,6 @@ def plot_bout_syllable_raster(
     syllable_order=None,
     syllable_colors=None,
     figsize=(6, 8),
-    inset_tick_step=10,
     show_align_marker=True,
     x_label=None,
     y_label="Song Index",
@@ -128,8 +125,6 @@ def plot_bout_syllable_raster(
         Custom order of syllables in the color map and legend
     syllable_colors : dict or None
         Optional mapping from syllables to fixed colors.
-    inset_tick_step : int
-        Tick spacing for inset-style plots.
     show_align_marker : bool
         If True, shows an arrow marking the alignment position
     x_label : str or None
@@ -738,7 +733,6 @@ def syllables_after_target_catch_noncatch(
             print(f"[skip] {bird}: no target_syl defined")
             continue
 
-        # Bestimme target_repeat für diesen Vogel
         if isinstance(target_repeat_per_bird, dict):
             trg_repeat = target_repeat_per_bird.get(bird, None)
         else:
@@ -777,14 +771,12 @@ def syllables_after_target_catch_noncatch(
             if os.path.basename(os.path.dirname(path)) in training_days_used
         }
 
-        # Verwende _extract_seq_counts
         _, noncatch_vals_bird = extract_seq_counts(
             noncatch_training_dict,
             target_syl_per_bird[bird],
             position="after",
             target_repeat=trg_repeat,
         )
-
         _, catch_vals_bird = extract_seq_counts(
             catch_training_dict,
             target_syl_per_bird[bird],

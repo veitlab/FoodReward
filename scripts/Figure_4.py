@@ -519,15 +519,11 @@ def summary_allrepeat_changes(
         print("[warn] No birds to plot.")
         return {"birds": [], "details": {}}
 
-    x_baseline = np.array([p["x"] for p in points], dtype=float)
-    y_train_catch_last = np.array([p["y"] for p in points], dtype=float)
-
     relative_train_percent = np.full(len(points), np.nan, dtype=float)
 
     for i, p in enumerate(points):
         xb = p["x"]
         yt = p["y"]
-        rel = relative_train_percent[i]
 
     for i, p in enumerate(points):
         xb = p["x"]
@@ -916,8 +912,6 @@ def summary_song_rate_across_birds(
             f"({int(training_total_songs[i])} songs / {training_total_hours[i]:.2f} h)"
         )
 
-
-    # --- Wilcoxon signed-rank test auf gepaarten Vogelwerten ---
     valid_mask = np.isfinite(baseline_vals) & np.isfinite(training_vals)
     baseline_valid = baseline_vals[valid_mask]
     training_valid = training_vals[valid_mask]
@@ -1028,30 +1022,25 @@ def summary_song_rate_across_birds(
         alpha=1,
         zorder=3
     )
-    
-    # Positionen in AXES-Koordinaten (0–1)
-    y = 1.02   # knapp über dem Plot
-    h = 0.03   # Höhe der Klammer
 
-    # Klammer zeichnen
+    y = 1.02 
+    h = 0.03
+
     ax.plot(
         [x_base_pos, x_base_pos, x_train_pos, x_train_pos],
         [y, y + h, y + h, y],
-        transform=ax.get_xaxis_transform(),  # <-- KEY
+        transform=ax.get_xaxis_transform(),
         color="black",
         lw=1,
         clip_on=False
     )
 
-    # p-Wert bestimmen
     p_text = stars_from_p(wilcoxon_p)
-
-    # Text
     ax.text(
         (x_base_pos + x_train_pos) / 2,
         y + h,
         p_text,
-        transform=ax.get_xaxis_transform(),  # <-- KEY
+        transform=ax.get_xaxis_transform(), 
         ha="center",
         va="bottom",
         clip_on=False
@@ -1550,7 +1539,6 @@ def syllables_beforeafter_target(
     )
 
     p_text = stars_from_p(wilcoxon_p)
-
     ax.text(
         (x_base + x_train) / 2,
         y + h,
@@ -1644,7 +1632,6 @@ def summary_target_repeat_per_bout(
         "#5F9D8A",
         "#C7B19C",
     ]
-
 
     bird_names = []
     bouts_baseline = []
@@ -1827,11 +1814,11 @@ def summary_target_repeat_per_bout(
         save_path = os.path.join(save_dir, save_name)
         fig.savefig(save_path, dpi=dpi, bbox_inches="tight")
         print(f"Figure saved to: {save_path}")
-
-    plt.show()
-
+        
     print(f"BS: {group_base:.2f}, +- {group_base_sem:.2f}")
     print(f"TR: {group_train:.2f}, +- {group_train_sem:.2f}")
+
+    plt.show()
 
 def summary_targetrepeat_per_repeats(
     birds,

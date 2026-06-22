@@ -68,7 +68,14 @@ def plot_click_accuracy_summary(
     dpi=300,
 ):
     """
-    Plot sheet-level mean click accuracy for hits, misses and false hits.
+    Plot mean accuracy for categories, here "hits", "misses", "false hits"
+
+    Parameters
+    ----------
+    summary_df : df
+        Contains data for each category for each experiment
+    sheet_colors : dict
+        Custom color map for all experiments
     """
     x_pos = np.arange(len(CATEGORIES))
     rng = np.random.default_rng(42)
@@ -165,6 +172,7 @@ def plot_click_accuracy_summary(
 
 if __name__ == "__main__":
 
+    # Fig S1 A
     CATEGORIES = ["hits", "misses", "false hits"]
     CATEGORY_LABELS = ["H", "M", "FH"]
 
@@ -172,12 +180,12 @@ if __name__ == "__main__":
         file_path=file_path,
         categories=CATEGORIES
         )
-
+    
     summary_df = make_click_accuracy_summary(all_pct, CATEGORIES)
 
     print_click_accuracy_summary(summary_df, CATEGORIES)
 
-    save_path = save_dir / "click_accuracy_sheet_means_wokb2.svg"
+    save_path = save_dir / "click_accuracy.svg"
 
     plot_click_accuracy_summary(
         summary_df=summary_df,
