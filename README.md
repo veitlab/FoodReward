@@ -52,3 +52,7 @@ For all requirements see requirements.txt or use
 ```bash
 pip install -r requirements.txt
 ```
+
+## Contact  
+For questions, issues or feedback regarding the code, please contact:  
+Franziska Heubach: franziska.heubach@student.uni-tuebingen.de  
