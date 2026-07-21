@@ -1,7 +1,8 @@
 # FoodReward - 2026
 
-Code and data repository accompanying the manuscript "Birdsong Modification with Food Reward".  
+Code and data repository accompanying the manuscript "Birdsong Modification with Food Reward", published on BioRxiv.  
 Authors: Franziska Heubach & Lena Veit, 2026
+https://www.biorxiv.org/content/10.64898/2026.05.27.728162v1
 
 **Note:** Figures can look aesthetically different from those in the manuscript due to changes later performed in Inkscape.
 
@@ -55,4 +56,5 @@ pip install -r requirements.txt
 
 ## Contact  
 For questions, issues or feedback regarding the code, please contact:  
+Lena Veit: lena.veit@uni-tuebingen.de  
 Franziska Heubach: franziska.heubach@student.uni-tuebingen.de  
