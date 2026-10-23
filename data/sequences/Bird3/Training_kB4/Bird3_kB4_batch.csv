@@ -1,0 +1,6 @@
+experiment,phase,day,batch_kind,batch_filename,batch_found,n_lines,n_timestamped_files,duration_hours
+Bird3_kB4,baseline,base_260123,batch,batch.txt,True,840,840,13.560555555555556
+Bird3_kB4,baseline,base_260124,batch,batch.txt,True,801,801,11.081944444444444
+Bird3_kB4,training,train_260128,batch,batch.txt,True,548,548,8.008055555555556
+Bird3_kB4,training,train_260129,batch,batch.txt,True,459,459,7.550833333333333
+Bird3_kB4,training,train_260130,batch,batch.txt,True,644,644,7.5697222222222225

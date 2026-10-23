@@ -1,0 +1,9 @@
+experiment,phase,day,batch_kind,batch_filename,batch_found,n_lines,n_timestamped_files,duration_hours
+Bird6_ah,baseline,base_260923,batch,batch.txt,TRUE,246,246,8.450833333333334
+Bird6_ah,baseline,base_260924,batch,batch.txt,TRUE,227,227,8.141944444444444
+Bird6_ah,training,train_260925,batch,batch.txt,TRUE,190,190,8.3725
+Bird6_ah,training,train_260926,batch,batch.txt,TRUE,187,187,8.003055555555555
+Bird6_ah,training,train_260927,batch,batch.txt,TRUE,207,207,7.891666666666667
+Bird6_ah,training,train_260928,batch,batch.txt,TRUE,165,165,7.757777777777778
+Bird6_ah,training,train_260929,batch,batch.txt,TRUE,220,220,7.387222222222222
+Bird6_ah,training,train_260930,batch,batch.txt,TRUE,240,240,7.899444444444445
