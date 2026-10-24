@@ -21,9 +21,20 @@ data/
           └── ...
       ├── Bird3/
           └── ...
-      └── Bird4/
-          └── ...
-  ├── click_accuracy.xlsx
+      ├── ...
+  ├── sequences_alldays/
+      ├── Bird1/
+          └── Training_bkd/
+              └── ...sequence.csv
+      ├── ...
+  ├── sequences_control/
+      ├── Control1/
+          └── Control_Training_dj/
+              └── ...sequence.csv
+      ├── ...
+  ├── Click_Accuracy.xlsx
+  ├── Approach_Training.xlsx
+  ├── Conditioning.xlsx
 scripts/
   ├── Figure_1.py
   ├── Figure_2.py
@@ -39,7 +50,17 @@ figures/
 requirements.txt
 README.md
 ```
+We recommend to run the code in a virtual environemnt with installed requirements:
+```bash
+python -m venv foodreward
+.\foodreward\Scripts\Activate.ps1   
+pip install -r requirements.txt
+```
+
 Scripts should be run from the *scripts* folder.    
+```bash
+python .\scripts\Figure_1.py
+```
 The folder *figures* will be created once a script was run.
 
 ## Requirements 
