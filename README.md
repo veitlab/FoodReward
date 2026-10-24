@@ -11,6 +11,8 @@ https://www.biorxiv.org/content/10.64898/2026.05.27.728162v1
 The repository contains sequences of all training days over all experiments described in the manuscript (for structure see below), as well as singing behaviour for the analysed days.
 In addition, it contains the accuracy of targeting during training (Click_Accuracy.xlsx), the approach behaviour during training (Approach_Training.xlsx) and the behavioural analysis of the conditioning phase (Conditioning.xlsx).
 
+All figures depicted in the manuscript can be created from this data with the python code given in the scripts folder.
+
 ## Repository Structure
 ```text
 data/
